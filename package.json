@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "react": "^15.6.1",
+    "react-autocomplete": "^1.7.1",
     "react-dom": "^15.6.1",
     "react-scripts": "1.0.11"
   },
@@ -11,6 +12,21 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test-cov": "npm run test -- --coverage --watch",
     "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "babel-eslint": "^7.2.3",
+    "enzyme": "^2.9.1",
+    "eslint": "^4.1.1",
+    "eslint-config-react-app": "^2.0.0",
+    "eslint-plugin-flowtype": "^2.34.1",
+    "eslint-plugin-import": "^2.6.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.1.0",
+    "react-test-renderer": "^15.6.1"
+  },
+  "jest": {
+    "collectCoverageFrom" : ["**/*.{js,jsx}", "!**/node_modules/**", "!**/coverage/**", "!**/src/registerServiceWorker.js", "!**/src/index.js"]
   }
 }

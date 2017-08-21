@@ -24,9 +24,16 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.1.0",
+    "nock": "^9.0.14",
     "react-test-renderer": "^15.6.1"
   },
   "jest": {
-    "collectCoverageFrom" : ["**/*.{js,jsx}", "!**/node_modules/**", "!**/coverage/**", "!**/src/registerServiceWorker.js", "!**/src/index.js"]
+    "collectCoverageFrom": [
+      "**/*.{js,jsx}",
+      "!**/node_modules/**",
+      "!**/coverage/**",
+      "!**/src/registerServiceWorker.js",
+      "!**/src/index.js"
+    ]
   }
 }

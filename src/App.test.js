@@ -1,7 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { shallow } from 'enzyme'
+import { shallow } from 'enzyme' //Shallow Rendering
 import App from './App'
+import nock from 'nock' //HTTP mocking
+
 
 const setup = () => {
   const output = shallow(<App/>)
@@ -26,20 +28,36 @@ describe('components', () => {
       expect(output.instance().getCurrentSearchMatches([{name:'TEST1'}, {name:'2TEST'}, {name:'OTHER'} ], 'TEST')).toEqual(['TEST1', '2TEST'])
     })
 
-    it('should successfully run getApiData', () => {
-      const output = setup()
-      output.instance().getApiData("films","https://swapi.co/api", "call")
-    })
+    describe('API fetching', () => {
 
-    it('should successfully run getApiData search', () => {
-      const output = setup()
-      output.instance().getApiData("people","L", "search")
-      output.instance().getApiData("people","Luke Skywalker", "search")
-    })
+      afterEach(() => {
+        nock.cleanAll()
+      })
 
-    it('should run getApiData but fail on fetch error', () => {
-      const output = setup()
-      output.instance().getApiData("films","https://xbadurlx", "call")
+      it('should successfully run getApiData', () => {
+        nock('https://swapi.co')
+        .get('/api/films/1')
+        .reply(200, {"title": "TEST_TITLE"})
+        const output = setup()
+        output.instance().getApiData("films","https://swapi.co/api/films/1", "call")
+      })
+
+      it('should successfully run getApiData search', () => {
+        nock('https://swapi.co')
+        .get('/api/people/?search=L')
+        .reply(200, {"results":[]})
+        const output = setup()
+        output.instance().getApiData("people","L", "search")
+      })
+
+      it('should run getApiData but fail on fetch error', () => {
+        nock('https://swapi.co')
+        .get('/api')
+        .reply(404)
+        const output = setup()
+        output.instance().getApiData("films","https://swapi.co/api", "call")
+      })
+
     })
 
     it('should call handleChange on change', () => {

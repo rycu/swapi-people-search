@@ -98,7 +98,17 @@ export default class App extends Component {
       this.setState( {currentSearchMatches: ['API call failed'] } )
     }
   }
-  
+
+  // Cross Resource test
+  // componentDidMount(){
+  //   (async () => {
+  //     await this.getApiData('films', 'https://swapi.co/api/films/1', 'call')
+  //     await this.getApiData('species', 'https://swapi.co/api/species/1', 'call')
+  //     await this.getApiData('starships', 'https://swapi.co/api/starships/9', 'call')
+  //     console.log(this.state)
+  //   })()
+  // }
+
   handleChange = e => {
       const value = e.target.value
       
@@ -204,6 +214,7 @@ export default class App extends Component {
 WISH LIST
 Order suggestions by match position
 Display data from other resources (Films, Species, etc)
+Make propTypes on details dynamic from people schema 
 Add Wookiee translation
 Add redux (could warrant the boilerplate if all API resources are used)
 */

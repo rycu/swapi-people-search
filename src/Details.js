@@ -1,9 +1,25 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 import './Details.css'
 
 export default class Details extends Component {
 
-  //ADD propTypes
+  static propTypes = {
+    name: PropTypes.string,
+    edited: PropTypes.string,
+    created: PropTypes.string,
+    species: PropTypes.array,
+    height: PropTypes.string,
+    eye_color: PropTypes.string,
+    birth_year: PropTypes.string,
+    gender: PropTypes.string,
+    vehicles: PropTypes.array,
+    hair_color: PropTypes.string,
+    starships: PropTypes.array,
+    skin_color: PropTypes.string,
+    homeworld: PropTypes.string,
+    films: PropTypes.array
+  }
 
   buildDisplay(){
 

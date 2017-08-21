@@ -1,0 +1,38 @@
+.person-details__title{
+  text-align: left;
+  padding: 0 5%;
+  margin:  1em 0 0.5em;
+  font-size: 2em;
+  color: white;
+  letter-spacing: 0.01em;
+}
+
+.person-details__error{
+  font-size: 1.4em;
+  color: white;
+  padding: 0 5%;
+  text-align: center;
+}
+
+.person-details__list{
+  margin: 0;
+  text-align: left;
+  background-color: #333;
+}
+
+.person-details__term, .person-details__description{
+  width: 40%;
+  padding: 2% 5%;
+  margin: 0;
+  display: inline-block;
+}
+
+.person-details__term{
+  border-bottom: 1px solid #222;
+  color: #FFE248;
+}
+
+.person-details__description{
+  border-bottom: 1px solid #222;
+  color: white;
+}

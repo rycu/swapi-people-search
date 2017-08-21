@@ -26,7 +26,15 @@ export default class App extends Component {
     .map(item => item.name)
   }
 
-  getApiData(resource, value, type){
+  //timestamp of last rendered request
+  lastRequest = 0
+
+  // async structure for the fetch
+  getApiData = async (resource, value, type) => {
+
+    //set timestamp for this
+    const requestStamp = Date.now()
+
     //add container for expected data if not present
     !this.state.apiData[resource] && this.setState(
       {apiData: Object.assign(
@@ -36,11 +44,11 @@ export default class App extends Component {
 
     //set API URL for searching or direct call (future expansion)
     const apiUrl = type === 'search' ? `https://swapi.co/api/${resource}/?search=${value}` : value
-    
-    //fetch the API data
-    fetch(apiUrl)
-    .then(res => res.json())
-    .then((json) => {
+
+    try {
+      //try and fetch the API data
+      const response = await fetch(apiUrl)
+      const json = await response.json()
 
       //set result(s) to variable as array
       let items = type === 'search' ? json.results : [json]
@@ -57,7 +65,13 @@ export default class App extends Component {
         }) === index
       )
 
-      if(type === 'search'){ 
+      //run branch with currentSearchMatches only if the type is 'search' 
+      //and the request hasn't been surpassed
+      if(type === 'search' && requestStamp > this.lastRequest){ 
+
+        //make the timestamp of this request the latest
+        this.lastRequest = requestStamp
+
         //get current search matches for autocomplete use
         const currentSearchMatches = this.getCurrentSearchMatches(items, value)
         //update state with new data and currentSearchMatches array
@@ -77,9 +91,14 @@ export default class App extends Component {
           )
         })
       }
-    })
-  }
 
+    } catch (error) {
+      //report error console log and add error message to Autocomplete
+      console.log(error)
+      this.setState( {currentSearchMatches: ['API call failed'] } )
+    }
+  }
+  
   handleChange = e => {
       const value = e.target.value
       
@@ -98,7 +117,7 @@ export default class App extends Component {
         //call getApiData
         this.getApiData('people', value, 'search')
 
-        //console.log('API_CALL_COUNT'
+        //console.log('API_CALL_COUNT')
         // TEST CASE: type 'luke sky' del* type 'darth vader' del* 
         // preload all people data:     9 API CALLS (all filtering, no searching) ❌
         // every key press:             38 API CALLS ❌
@@ -183,10 +202,9 @@ export default class App extends Component {
 
 /*
 WISH LIST
-Handle fetch errors
-Queue fetch requests 
+Order suggestions by match position
 Display data from other resources (Films, Species, etc)
-add Wookiee translation
-add redux (could warrant it if all api resources are used)
+Add Wookiee translation
+Add redux (could warrant the boilerplate if all API resources are used)
 */
 

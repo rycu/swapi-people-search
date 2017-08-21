@@ -1,10 +1,10 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { shallow, mount } from 'enzyme'
+import { shallow } from 'enzyme'
 import App from './App'
 
 const setup = () => {
-  const output = mount(<App/>)
+  const output = shallow(<App/>)
   return output
 }
 
@@ -34,6 +34,12 @@ describe('components', () => {
     it('should successfully run getApiData search', () => {
       const output = setup()
       output.instance().getApiData("people","L", "search")
+      output.instance().getApiData("people","Luke Skywalker", "search")
+    })
+
+    it('should run getApiData but fail on fetch error', () => {
+      const output = setup()
+      output.instance().getApiData("films","https://xbadurlx", "call")
     })
 
     it('should call handleChange on change', () => {

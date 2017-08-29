@@ -24,6 +24,8 @@ export default class App extends Component {
     return items.filter(item => item.name.toUpperCase()
     .includes(value.toUpperCase()))
     .map(item => item.name)
+    //sort by first occurring partial matches
+    .sort((a, b) => a.toUpperCase().indexOf(value.toUpperCase()) <= b.toUpperCase().indexOf(value.toUpperCase()) ? -1 : 1)
   }
 
   //timestamp of last rendered request

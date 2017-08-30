@@ -21,6 +21,11 @@ export default class Details extends Component {
     films: PropTypes.array
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.name === this.props.name ? false : true
+  }
+
+
   buildDisplay(){
 
     //set props to variable
@@ -84,7 +89,7 @@ export default class Details extends Component {
         }
       }
     }
-    return (
+    return console.log('render Details') || (
       <div>
         <h3 className="person-details__title">{this.props.name}</h3>
         <dl className="person-details__list">

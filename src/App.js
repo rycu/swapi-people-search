@@ -13,6 +13,7 @@ export default class App extends Component {
     this.state = { 
       value:'' , 
       searchTerms:[''],
+      pulledURLs:[],
       apiData: {},
       currentSearchMatches:[], 
       selectedPerson:''
@@ -55,6 +56,8 @@ export default class App extends Component {
       //set result(s) to variable as array
       let items = type === 'search' ? json.results : [json]
 
+
+
       //use spread to merge the existing API data
       items = [...this.state.apiData[resource].items, ...items]
 
@@ -96,7 +99,7 @@ export default class App extends Component {
 
     } catch (error) {
       //report error console log and add error message to Autocomplete
-      console.log(error)
+      console.log(resource, value, type, error)
       this.setState( {currentSearchMatches: ['API call failed'] } )
     }
   }
@@ -144,7 +147,51 @@ export default class App extends Component {
       }
   }
 
+  
+  updatePulledURLs(urls){
+
+      //pulledURLs declared & overwritten to prevent 
+      //jest coverage bug that crashes V8
+      let pulledURLs = urls
+      //add any new search terms to the array
+      pulledURLs = [...this.state.pulledURLs, ...pulledURLs]
+      this.setState({ pulledURLs })
+
+  }
+
   handleSelect = e => {
+
+    //use findIndex to locate the state data for the selected person
+    const personIndex = this.state.apiData.people.items.findIndex((element) => {
+      return element.name === e
+    })
+    //use the data location to return the data
+    let personData = this.state.apiData.people.items[personIndex]
+    //temp arr for listing pulledURLs before adding them to the state
+    let urlArr = []
+
+    //loop through personData props
+    for (let prop in personData) {
+
+        //if the prop is an array loop through it and call data for each URL
+        if(Array.isArray(personData[prop])){
+          personData[prop].forEach((element) => {
+            if(!this.state.pulledURLs.includes(element) && !urlArr.includes(element)){
+              urlArr.push(element)
+              //setTimeout used to queue calls
+              setTimeout(() => {this.getApiData(prop, element, 'call')}, 1); 
+            }
+          })
+        //if the prop is a URL call its data
+        }else if(personData[prop].includes('https://swapi.co/api') && prop !== 'url'){
+          urlArr.push(personData[prop])
+          this.getApiData(prop, personData[prop], 'call')
+        }
+        
+    }
+    //update pulledURLs
+    this.updatePulledURLs(urlArr)
+
     //onSelect set the state by setting the selected person
     //& removing the search value
     this.setState({ value:'', selectedPerson:e })
@@ -167,7 +214,7 @@ export default class App extends Component {
   }
 
   render() {
-    //console.log(this.state)
+    console.log(this.state)
     return (
       <div className="App">
         <div className="App-header">
@@ -214,7 +261,6 @@ export default class App extends Component {
 
 /*
 WISH LIST
-Order suggestions by match position
 Display data from other resources (Films, Species, etc)
 Make propTypes on details dynamic from people schema 
 Add Wookiee translation
